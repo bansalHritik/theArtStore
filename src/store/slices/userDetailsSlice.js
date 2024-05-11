@@ -69,9 +69,7 @@ export const emailPasswordLogin = createAsyncThunk(
       return { userId: uid, email };
     } catch (ex) {
       const { code, message } = ex;
-      console.log('Error', code, message);
-
-      return rejectWithValue(ex.toString());
+      return rejectWithValue({ code, message });
     }
   },
 );

@@ -7,23 +7,16 @@ import {
   onAuthStateChanged as onAuthStateChangedMain,
   signOut,
 } from 'firebase/auth';
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyA-RhdtWspuPCjx4OPCmuhSXSWZ_ZvBFKM',
-  authDomain: 'theartstore-63c10.firebaseapp.com',
-  projectId: 'theartstore-63c10',
-  storageBucket: 'theartstore-63c10.appspot.com',
-  messagingSenderId: '263530357776',
-  appId: '1:263530357776:web:c5c897421bd0718f839695',
-  measurementId: 'G-44FMR5RN2X',
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
+  measurementId: process.env.MEASUREMENT_ID,
 };
 
 // Initialize Firebase

@@ -5,7 +5,7 @@ import { AppNavigator } from './pages';
 
 export const App = () => (
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <AppNavigator />
     </BrowserRouter>
   </Provider>

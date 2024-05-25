@@ -7,5 +7,6 @@ export const RouteMap = {
   App: {
     HOME: '/home',
     ADD_PRODUCTS: '/add-products',
+    VIEW_PRODUCT_DETAIL: '/product/:productId',
   },
 };

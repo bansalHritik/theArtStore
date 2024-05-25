@@ -1,13 +1,5 @@
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged as onAuthStateChangedMain,
-  signOut,
-} from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
+import { getApp, initializeApp } from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { getFirestore } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -19,22 +11,9 @@ const firebaseConfig = {
   measurementId: process.env.MEASUREMENT_ID,
 };
 
+export const initializeFirebase = () =>
+  firebase.apps.length === 0 ? initializeApp(firebaseConfig) : getApp();
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeFirebase();
 export const db = getFirestore(app);
-
-const provider = new GoogleAuthProvider();
-
-// whenever a user interacts with the provider, we force them to select an account
-provider.setCustomParameters({
-  prompt: 'select_account ',
-});
-export const auth = getAuth();
-
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
-export const signUpWithEmailAndPassword = (email, password) =>
-  createUserWithEmailAndPassword(auth, email, password);
-export const loginWithEmailPassword = (email, password) =>
-  signInWithEmailAndPassword(auth, email, password);
-export const onAuthStateChanged = (callback) => onAuthStateChangedMain(auth, callback);
-export const logout = () => signOut(auth);

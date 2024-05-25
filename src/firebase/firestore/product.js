@@ -1,15 +1,10 @@
-import { collection, doc, get, addDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, get, addDoc, getDocs, getDoc } from 'firebase/firestore';
 import { db } from '../firebase.utils';
 
 const docReference = () => collection(db, 'products');
 export const add = async (productDetails) => {
-  console.log('DB', db);
   const docRef = collection(db, 'products');
-
   const res = await addDoc(docRef, productDetails);
-  // docRef?.add(productDetails);
-  console.log('Re', res);
-  console.log('DocReference', docReference);
 };
 
 export const getAll = async () => {
@@ -19,4 +14,9 @@ export const getAll = async () => {
     products.push({ ...doc.data(), id: doc.id });
   });
   return products;
+};
+
+export const get = async (id) => {
+  const querySnapshot = await getDoc(doc(db, 'products', id));
+  return { ...querySnapshot.data(), id: querySnapshot.id };
 };

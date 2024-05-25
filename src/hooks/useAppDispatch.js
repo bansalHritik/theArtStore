@@ -8,17 +8,18 @@ export const STATUS = {
   Completed: 'completed',
 };
 
-const useAppDispatch = () => {
+const useAppDispatch = (action) => {
   const [status, setStatus] = useState(STATUS.Idle);
   const dispatch = useDispatch();
 
-  const dispatchWithCallback = async (action, successCallback, failureCallback) => {
+  const dispatchWithCallback = async (args, successCallback, failureCallback) => {
     try {
       setStatus(STATUS.InProgress);
-      const result = await dispatch(action).unwrap();
+      const result = await dispatch(action?.(args)).unwrap();
       setStatus(STATUS.Completed);
       successCallback?.(result);
     } catch (error) {
+      console.warn('Error', error);
       setStatus(STATUS.Failed);
       failureCallback?.(error);
     }

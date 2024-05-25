@@ -1,9 +1,10 @@
-import { Button, CircularProgress, TextField } from '@mui/material';
+import { Card, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { emailPasswordLogin } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { RouteMap } from '../../routes';
 import useAppDispatch, { STATUS } from '../../hooks/useAppDispatch';
+import { Button } from '../../components';
 
 const useLoginState = () => {
   const [loginState, setLoginState] = useState({ email: '', password: '', name: '' });
@@ -27,25 +28,23 @@ const useLoginState = () => {
 
 const LoginModal = () => {
   const { email, password, setEmail, setPassword } = useLoginState();
-  const [status, dispatch] = useAppDispatch();
+  const [status, dispatch] = useAppDispatch(emailPasswordLogin);
   const navigator = useNavigate();
+
   const formSubmitHandler = (formSubmitEvent) => {
     formSubmitEvent.preventDefault();
-
-    dispatch(
-      emailPasswordLogin({ email, password }),
-      (data) => {
-        console.log('Login Success', data);
-      },
-      (err) => {
-        console.log('Login Failed', err);
-      },
-    );
+    dispatch({ email, password });
   };
 
   return (
-    <div>
-      <form onSubmit={formSubmitHandler}>
+    <Card className="p-3">
+      <Typography variant="h6" align="center">
+        Login
+      </Typography>
+      <form
+        onSubmit={formSubmitHandler}
+        className="flex flex-col gap-3 self-center justify-center items-center"
+      >
         <TextField
           label="Email"
           variant="outlined"
@@ -59,27 +58,25 @@ const LoginModal = () => {
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
         />
-        <br />
-        {status == STATUS.InProgress ? (
-          <CircularProgress />
-        ) : (
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
-        )}
-        <br />
-        <Button variant="contained" onClick={() => navigator(RouteMap.Auth.SIGNUP)}>
-          Not registered! Sign Up
-        </Button>
-        {status}
-        {/* <Button onClick={logout}>Logout</Button> */}
+
+        <Button
+          text={'Sumbit'}
+          variant="contained"
+          type="submit"
+          loading={status == STATUS.InProgress}
+        />
+        <Button
+          variant="contained"
+          text="Not registered! Sign Up"
+          onClick={() => navigator(RouteMap.Auth.SIGNUP)}
+        />
       </form>
-    </div>
+    </Card>
   );
 };
 
-export const LoginPage = () => (
-  <div>
+export const Login = () => (
+  <div className="flex flex-1 justify-center items-center">
     <LoginModal />
   </div>
 );

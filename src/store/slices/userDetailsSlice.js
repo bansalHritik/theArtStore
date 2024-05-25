@@ -4,7 +4,7 @@ import {
   logout,
   signInWithGooglePopup,
   signUpWithEmailAndPassword,
-} from '../../firebase/firebase.utils';
+} from '../../firebase';
 
 export const userDetailsSlice = createSlice({
   name: 'user',
@@ -40,7 +40,7 @@ export const loginViaGmail = createAsyncThunk(
       } = await signInWithGooglePopup();
       return { name, email, userId };
     } catch (ex) {
-      return rejectWithValue(ex);
+      return rejectWithValue({ code: ex.code, message: ex.message });
     }
   },
 );
@@ -54,18 +54,20 @@ export const emailPasswordSignUp = createAsyncThunk(
       } = await signUpWithEmailAndPassword(email, password);
       return { email, userId: uid };
     } catch (error) {
-      return rejectWithValue(error);
+      const { code, message } = error;
+      return rejectWithValue({ code, message });
     }
   },
 );
 
 export const emailPasswordLogin = createAsyncThunk(
   'user/emailPasswordLogin',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password }, { fulfillWithValue, rejectWithValue }) => {
     try {
       const {
         user: { uid },
       } = await loginWithEmailPassword(email, password);
+      fulfillWithValue?.({ userId: uid, email });
       return { userId: uid, email };
     } catch (ex) {
       const { code, message } = ex;
@@ -74,13 +76,9 @@ export const emailPasswordLogin = createAsyncThunk(
   },
 );
 
-export const doLogout = createAsyncThunk('user/logout', async (_, { rejectWithValue }) => {
-  try {
-    await logout();
-    return null;
-  } catch (error) {
-    return rejectWithValue(error);
-  }
+export const doLogout = createAsyncThunk('user/logout', async (_, { fulfillWithValue }) => {
+  await logout();
+  return fulfillWithValue();
 });
 
 export const { saveUserDetail, removeUserDetail } = userDetailsSlice.actions;

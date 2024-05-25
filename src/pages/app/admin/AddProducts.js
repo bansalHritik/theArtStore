@@ -11,18 +11,16 @@ export const AddProducts = () => {
     description: '',
   });
 
-  const [status, dispatch] = useAppDispatch();
+  const [status, dispatch] = useAppDispatch(saveProduct);
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     let a = new FormData(e.target);
-    console.log('Form', e);
-    console.log('FormData', a.get('item-pictures'));
     dispatch(
-      saveProduct({
+      {
         name: a.get('item-name'),
         description: a.get('description'),
         price: a.get('price'),
-      }),
+      },
       (res) => {
         console.log('res', res);
       },
